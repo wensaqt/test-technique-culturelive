@@ -1,6 +1,11 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CustomerModule } from './customer/customer.module';
+import { CustomersModule } from './customers/customers.module';
+import { AddressesModule } from './addresses/addresses.module';
+import { StoresModule } from './stores/stores.module';
+import { RentalsModule } from './rentals/rentals.module';
+import { InventoryModule } from './inventory/inventory.module';
+import { StaffModule } from './staff/staff.module';
 
 @Module({
   imports: [
@@ -11,10 +16,15 @@ import { CustomerModule } from './customer/customer.module';
       username: 'postgres',
       password: 'postgres',
       database: 'sakila',
-      autoLoadEntities: true,
+      entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: false,
     }),
-    CustomerModule,
+    CustomersModule,
+    AddressesModule,
+    StoresModule,
+    RentalsModule,
+    InventoryModule,
+    StaffModule,
   ],
 })
 export class AppModule {}
