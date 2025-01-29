@@ -5,6 +5,7 @@ import { Rental } from './entities/rental.entity';
 import { CreateRentalDto } from './dto/create-rental.dto';
 import { UpdateRentalDto } from './dto/update-rental.dto';
 import { Customer } from '../customers/entities/customer.entity';
+import * as moment from 'moment-timezone';
 
 @Injectable()
 export class RentalsService {
@@ -16,7 +17,6 @@ export class RentalsService {
   ) {}
 
   async create(createRentalDto: CreateRentalDto): Promise<Rental> {
-    // Récupérer le client et son fuseau horaire
     const customer = await this.customersRepository.findOne({
       where: { customer_id: createRentalDto.customer_id },
     });
@@ -26,16 +26,18 @@ export class RentalsService {
         `Client #${createRentalDto.customer_id} non trouvé`,
       );
     }
-    // Convertir les dates
-    const rentalDate = new Date(createRentalDto.rental_date);
-    const returnDate = new Date(createRentalDto.return_date);
 
-    // Calculer la durée en jours
-    const durationInDays = Math.floor(
-      (returnDate.getTime() - rentalDate.getTime()) / (1000 * 60 * 60 * 24),
+    const rentalDate = moment.tz(
+      createRentalDto.rental_date,
+      customer.timezone,
+    );
+    const returnDate = moment.tz(
+      createRentalDto.return_date,
+      customer.timezone,
     );
 
-    // Valider la durée
+    const durationInDays = returnDate.diff(rentalDate, 'days');
+
     if (durationInDays < 7) {
       throw new BadRequestException(
         'La durée minimale de location est de 1 semaine',
@@ -48,7 +50,11 @@ export class RentalsService {
       );
     }
 
-    const rental = this.rentalsRepository.create(createRentalDto);
+    const rental = this.rentalsRepository.create({
+      ...createRentalDto,
+      rental_date: rentalDate.toDate(),
+      return_date: returnDate.toDate(),
+    });
 
     try {
       return await this.rentalsRepository.save(rental);

@@ -1,0 +1,31 @@
+post http://localhost:3000/rentals
+Content-Type: application/json
+
+{
+  "rental_date": "2025-01-25T12:00:00Z",
+  "return_date": "2025-02-03T12:00:00Z",
+  "inventory_id": 1,
+  "customer_id": 1,
+  "staff_id": 1
+}
+
+# Crée une location avec :
+# - Date de début : il y a 4 jours (25 janvier 2025)
+# - Date de retour : dans 5 jours (3 février 2025)
+# - Durée totale : 9 jours (respecte la règle de 1 semaine minimum)
+
+# Cette location devrait apparaître dans les notifications car :
+# - Elle est active (a commencé il y a 4 jours)
+# - La date de retour est exactement dans 5 jours
+
+# Crée une location pour tester les notifications
+
+# Crée une location avec :
+# - Durée de 8 jours (respecte la règle de 1 semaine minimum)
+# - Le client devrait recevoir une notification à J-5 et J-3 
+
+# Il y aura peut-être besoin de changer l'id inventory si le film n'est pas disponible à la location
+
+# Crée une location qui devrait déclencher :
+# - Une notification à J-5 (aujourd'hui)
+# - Une notification à J-3 (dans 2 jours)
