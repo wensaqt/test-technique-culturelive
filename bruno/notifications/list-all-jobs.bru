@@ -1,0 +1,12 @@
+GET http://localhost:3000/notifications/jobs
+
+# Liste tous les jobs de notifications planifiés
+# Devrait retourner un tableau avec fiveDaysNotification et threeDaysNotification
+
+GET http://localhost:3000/notifications/jobs/fiveDaysNotification
+
+# Vérifie l'état du job J-5 
+
+# Devrait montrer :
+# - Une notification à venir dans fiveDaysNotification
+# - La même location apparaîtra dans threeDaysNotification dans 2 jours 

@@ -44,6 +44,9 @@ export class Customer {
   @Column({ nullable: true })
   active: number;
 
+  @Column({ length: 50, nullable: false, default: 'UTC' })
+  timezone: string;
+
   @ManyToOne(() => Store)
   @JoinColumn({ name: 'store_id' })
   store: Store;
